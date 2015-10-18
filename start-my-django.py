@@ -23,7 +23,7 @@ def get_project_name():
 def start_project(django_project_name):
     print "Starting your project....."
 
-    command_run = subprocess.call(["django-admin.py", "startproject", django_project_name])    
+    command_run = subprocess.call(["bin/django-admin.py", "startproject", django_project_name])    
     if command_run == 0:  
         print "Project Successfully Started" 
         return True
@@ -36,7 +36,8 @@ def start_app(django_project_name):
     django_app_name = raw_input("Please Enter App name \n")
     os.chdir(django_project_name)
     os.getcwd()
-    command_run = subprocess.call(["python", "manage.py", "startapp", django_app_name])
+   
+    command_run = subprocess.call(["../bin/python", "manage.py", "startapp", django_app_name])
 
     if command_run == 0:   
         print "App Successfully Started"
@@ -59,12 +60,10 @@ def start_git():
 
 
 
-
 try:
     print "Welcome to installation. First up, lets install virtualenv in current directory"
     virtualenv_directory = '.'    
     subprocess.call(["virtualenv", virtualenv_directory]) 
-    print os.getcwd()
 
 except OSError, ex:
     print "Something went wrong with the directory path.Please check your directory path",ex
