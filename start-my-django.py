@@ -50,6 +50,10 @@ def start_git():
     git_confirm = raw_input("Do you want to go ahead with git initialization(yes/no) \n")
     if yes.match(git_confirm):
         try:
+            os.chdir('../')
+            subprocess.call(["touch",".gitignore"])
+            with open(".gitignore", "w") as f:
+                f.write("bin/\nlib/\nlocal/\ninclude/\n*.pyc")
             subprocess.call(["git", "init"])
             subprocess.call(["git", "add", "."])
             subprocess.call(["git", "commit", "-m", "first commit"])
