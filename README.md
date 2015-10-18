@@ -22,8 +22,11 @@ What script does:
     3) Once django installation is done, it asks for the django project name and starts the project
     4) After the project is started, it asks for app name and starts the app
     5) Once the app is started, it will ask if you wish to do git initialization. If yes, 
-    then it initializes git in the current folder and makes the first commit.
-    6) You can use the script to start any number of django projects.
+    then it initializes git in the current directory.
+    6) It will create the .gitignore file for you which will ignore all the environment related directories and all     *.pyc files.
+    7) After this it will make the first git commit
+    
+You can use the script to start any number of django projects.
     
 I have tested script against bare minimum combinations of bad-inputs. Please report the issues incase the script fails 
 due to bad inputs
