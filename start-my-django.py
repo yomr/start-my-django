@@ -20,10 +20,10 @@ def get_project_name():
 
 
 
-def start_project(django_project_name):
+def start_project(django_project_name, virtualenv_directory):
     print "Starting your project....."
 
-    command_run = subprocess.call(["bin/django-admin.py", "startproject", django_project_name])    
+    command_run = subprocess.call(["{0}/bin/django-admin.py".format(virtualenv_directory), "startproject", django_project_name])    
     if command_run == 0:  
         print "Project Successfully Started" 
         return True
@@ -31,13 +31,13 @@ def start_project(django_project_name):
         return        
 
 
-def start_app(django_project_name):
+def start_app(django_project_name, virtualenv_directory):
 
     django_app_name = raw_input("Please Enter App name \n")
     os.chdir(django_project_name)
     os.getcwd()
    
-    command_run = subprocess.call(["../bin/python", "manage.py", "startapp", django_app_name])
+    command_run = subprocess.call(["../{0}/bin/python".format(virtualenv_directory), "manage.py", "startapp", django_app_name])
 
     if command_run == 0:   
         print "App Successfully Started"
@@ -65,9 +65,14 @@ def start_git():
 
 
 try:
-    print "Welcome to installation. First up, lets install virtualenv in current directory"
-    virtualenv_directory = '.'    
-    subprocess.call(["virtualenv", virtualenv_directory]) 
+    confirm = raw_input("Welcome to installation. First up, lets install virtualenv. Do you want to install in current directory(yes/no) \n")
+    confirm = yes.match(confirm)
+    if confirm:
+        virtualenv_directory = '.' 
+    else:
+	virtualenv_directory = raw_input("Please Enter a directory name \n")
+
+    subprocess.call(["virtualenv", virtualenv_directory])
 
 except OSError, ex:
     print "Something went wrong with the directory path.Please check your directory path",ex
@@ -81,25 +86,6 @@ if confirm:
     install_django(virtualenv_directory)
     while(not project_success):
         project_name = get_project_name()
-        project_success = start_project(project_name)
-    start_app(project_name)
+        project_success = start_project(project_name, virtualenv_directory)
+    start_app(project_name, virtualenv_directory)
     start_git()
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-
-
-
