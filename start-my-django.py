@@ -15,15 +15,18 @@ def install_django(virtualenv_directory):
         exit()
 
 def get_project_name():
-    django_project_name = raw_input("Please enter the django project name \n")
+    print '******************************************** \n'
+    django_project_name = raw_input("Please enter the django project name.  Please use only numbers, letters and underscores. \n")
     return django_project_name
 
 
 
 def start_project(django_project_name, virtualenv_directory):
-    print "Starting your project....."
-
-    command_run = subprocess.call(["{0}/bin/django-admin.py".format(virtualenv_directory), "startproject", django_project_name])    
+    print "Starting django project....."
+    try:
+        command_run = subprocess.call(["{0}/bin/django-admin.py".format(virtualenv_directory), "startproject", django_project_name])    
+    except CommandError as e:
+        command_run = 1 #random digit assignment to make the below condition false
     if command_run == 0:  
         print "Project Successfully Started" 
         return True
@@ -32,20 +35,22 @@ def start_project(django_project_name, virtualenv_directory):
 
 
 def start_app(django_project_name, virtualenv_directory):
-
-    django_app_name = raw_input("Please Enter App name \n")
+    print '******************************************** \n'
+    django_app_name = raw_input("Please enter the App name. The app name should be different from project name. Please use only numbers, letters and underscores. \n")
     os.chdir(django_project_name)
     os.getcwd()
-   
-    command_run = subprocess.call(["../{0}/bin/python".format(virtualenv_directory), "manage.py", "startapp", django_app_name])
-
+    try: 
+        command_run = subprocess.call(["../{0}/bin/python".format(virtualenv_directory), "manage.py", "startapp", django_app_name])
+    except Exception as e:
+        command_run = 1
     if command_run == 0:   
         print "App Successfully Started"
     else:
         os.chdir('../')
-        start_app(django_project_name)        
+        start_app(django_project_name, virtualenv_directory)        
 
 def start_git():
+    print '******************************************** \n'
     print "Before you start writing code, you should know that, \nYour life will be difficult if you do not use Version Control System. Start using Git."
     git_confirm = raw_input("Do you want to go ahead with git initialization(yes/no) \n")
     if yes.match(git_confirm):
