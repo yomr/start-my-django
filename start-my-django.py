@@ -71,24 +71,29 @@ def start_git():
 
 
 def start_virtualenv():
-    confirm = raw_input("Welcome to installation. First up, lets install virtualenv.\n Do you want to install in current directory(yes/no) \n")
-    confirm = yes.match(confirm)
-    if confirm:
-        virtualenv_directory = '.' 
-    else:
-	   virtualenv_directory = raw_input("Please Enter a directory name \n")
+	confirm = raw_input("Welcome to installation. First up, lets install virtualenv.\n Do you want to install in current directory(yes/no) \n")
+	confirm = yes.match(confirm)
+	if confirm:
+		virtualenv_directory = '.' 
+	else:
+		virtualenv_directory = raw_input("Please Enter a directory name \n")
 
-    py_version = raw_input("Which Python version do you want to use(2/3) \n")
-    py_path = "python" + py_version
-    
-    try:
-        subprocess.call(["virtualenv", "-p", py_path, virtualenv_directory,])
-    except OSError, ex:
-        print "Something went wrong with the directory path.Please check your directory path",ex
-        sys.exit()
+	command_run = 1
+	while(command_run != 0):
+		py_version = raw_input("Which Python version do you want to use(2/3) \n")
+		py_path = "python" + py_version
 
-    print "\nAwesome. VirtualEnv is installed."        
-    return virtualenv_directory
+		try:
+			command_run = subprocess.call(["virtualenv", "-p", py_path, virtualenv_directory,])
+		except OSError, ex:
+			print "Something went wrong with the directory path.Please check your directory path",ex
+			sys.exit()
+
+		if command_run != 0:
+			print '\nPlease, enter only 2 or 3 for Python version. \n'
+
+	print "\nAwesome. VirtualEnv is installed."        
+	return virtualenv_directory
 
 
 def main():
