@@ -8,17 +8,17 @@ yes = re.compile("yes|Y|y|Yes")
       
 def install_django(virtualenv_directory):
     try:
-        print "installing django"
+        print "Installing django....."
         subprocess.call(['{0}/bin/pip'.format(virtualenv_directory), "install","django"])   
     except Exception,e:
         print "Unable to Install Django.",e
         exit()
 
+
 def get_project_name():
     print '******************************************** \n'
     django_project_name = raw_input("Please enter the django project name.  Please use only numbers, letters and underscores. \n")
     return django_project_name
-
 
 
 def start_project(django_project_name, virtualenv_directory):
@@ -49,6 +49,7 @@ def start_app(django_project_name, virtualenv_directory):
         os.chdir('../')
         start_app(django_project_name, virtualenv_directory)        
 
+
 def start_git():
     print '******************************************** \n'
     print "Before you start writing code, you should know that, \nYour life will be difficult if you do not use Version Control System. Start using Git."
@@ -62,35 +63,55 @@ def start_git():
             subprocess.call(["git", "init"])
             subprocess.call(["git", "add", "."])
             subprocess.call(["git", "commit", "-m", "first commit"])
-            print "Great work buddy. Git iniitalised and first commit done. You are now safe under the wings of git"
+            print "\nGreat work buddy. Git iniitalised and first commit done. You are now safe under the wings of git"
         except Exception,e:
             print "Couldnt initialise Git",e    
             exit()
+    print "\nGreat work buddy. You can code now."
 
 
+def start_virtualenv():
+	confirm = raw_input("Welcome to installation. First up, lets install virtualenv.\n Do you want to install in current directory(yes/no) \n")
+	confirm = yes.match(confirm)
+	if confirm:
+		virtualenv_directory = '.' 
+	else:
+		virtualenv_directory = raw_input("Please Enter a directory name \n")
 
-try:
-    confirm = raw_input("Welcome to installation. First up, lets install virtualenv. Do you want to install in current directory(yes/no) \n")
-    confirm = yes.match(confirm)
-    if confirm:
-        virtualenv_directory = '.' 
-    else:
-	virtualenv_directory = raw_input("Please Enter a directory name \n")
+	command_run = 1
+	while(command_run != 0):
+		py_version = raw_input("Which Python version do you want to use(2/3) \n")
+		py_path = "python" + py_version
 
-    subprocess.call(["virtualenv", virtualenv_directory])
+		try:
+			command_run = subprocess.call(["virtualenv", "-p", py_path, virtualenv_directory,])
+		except OSError, ex:
+			print "Something went wrong with the directory path.Please check your directory path",ex
+			sys.exit()
 
-except OSError, ex:
-    print "Something went wrong with the directory path.Please check your directory path",ex
-    sys.exit()
+		if command_run != 0:
+			print '\nPlease, enter only 2 or 3 for Python version. \n'
 
+	print "\nAwesome. VirtualEnv is installed."        
+	return virtualenv_directory
+
+
+def main():
+    virtualenv_directory = start_virtualenv()
+    print '******************************************** \n'
     
-confirm = raw_input( "Awesome. VirtualEnv is installed. Do you want to continue with Django installation(yes/no) \n")
-confirm = yes.match(confirm)
-project_success = False
-if confirm:
-    install_django(virtualenv_directory)
-    while(not project_success):
-        project_name = get_project_name()
-        project_success = start_project(project_name, virtualenv_directory)
-    start_app(project_name, virtualenv_directory)
-    start_git()
+    confirm = raw_input("Do you want to continue with Django installation(yes/no) \n")
+    confirm = yes.match(confirm)
+    
+    project_success = False
+    if confirm:
+        install_django(virtualenv_directory)
+        while(not project_success):
+            project_name = get_project_name()
+            project_success = start_project(project_name, virtualenv_directory)
+        start_app(project_name, virtualenv_directory)
+        start_git()
+
+
+#start everything
+main()
